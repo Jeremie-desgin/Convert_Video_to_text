@@ -21,41 +21,55 @@ char_aspect_ratio = onecharWidth/onecharHeight
 def getchar(inputint):
     return charArray[math.floor(inputint*interval)]
 
-text_file = open("output.txt", "w")
+while True:
+    try:
+        file_name = input("What is the File? (e.g., nemo.webp)").strip().lower()
+        im = Image.open(file_name).convert("RGBA")
+        break
+    except FileNotFoundError:
+        print("file not found")
+        continue
 
-im = Image.open("nemo.webp").convert("RGB")
+
+
+text_file = open("output.txt", "w")
 
 fnt = ImageFont.truetype("arial.ttf", 20)
 
 width, height = im.size
 
 print(width,height, height/width )
-new_width = int(scaleFactor * width * char_aspect_ratio)
+new_width = int(scaleFactor * width )
 new_height = int(scaleFactor * height * char_aspect_ratio)
 
 im = im.resize((new_width,new_height))
 twidth, theight = im.size
 pix = im.load()
 
+avg_color_image = im.resize((1,1))
+avg_color = avg_color_image.getpixel((0,0))
+#print(avg_color)
 
-outputImage = Image.new('RGB', (onecharWidth * twidth, onecharHeight * theight), color = (0,0,0))
-print(twidth,theight)
+outputImage = Image.new('RGBA', (onecharWidth * twidth, onecharHeight * theight), color = (0,0,0,0))
+print(twidth,theight, theight/twidth)
 
 d = ImageDraw.Draw(outputImage)
 
 #print(im.mode)
-print(f"This is WxL {width},{height}")
+#print(f"This is WxL {width},{height}")
 
 for i in range(theight):
     for j in range(twidth):
-        r, g, b = pix[j, i]
+        r, g, b, A = pix[j, i]
         #print(r)
         h = int((r + g + b)/3)
         pix[j,i] = (h, h, h)
         text_file.write(getchar(h))
-        d.text((j*onecharHeight, i*onecharWidth), getchar(h), font = fnt, fill = (r,g,b))
+        d.text((j*onecharWidth, i*onecharHeight), getchar(h), font = fnt, fill = (r,g,b))
 
     text_file.write('\n')
 text_file.close()
 outputImage.save ("output.png")
 print("Converted!")
+
+
