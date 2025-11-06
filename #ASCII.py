@@ -24,26 +24,38 @@ def getchar(inputint):
 text_file = open("output.txt", "w")
 
 im = Image.open("nemo.webp").convert("RGB")
+
+fnt = ImageFont.truetype("arial.ttf", 20)
+
 width, height = im.size
 
+print(width,height, height/width )
 new_width = int(scaleFactor * width * char_aspect_ratio)
 new_height = int(scaleFactor * height * char_aspect_ratio)
 
 im = im.resize((new_width,new_height))
-width, height = im.size
+twidth, theight = im.size
 pix = im.load()
+
+
+outputImage = Image.new('RGB', (onecharWidth * twidth, onecharHeight * theight), color = (0,0,0))
+print(twidth,theight)
+
+d = ImageDraw.Draw(outputImage)
 
 #print(im.mode)
 print(f"This is WxL {width},{height}")
 
-for i in range(height):
-    for j in range(width):
+for i in range(theight):
+    for j in range(twidth):
         r, g, b = pix[j, i]
         #print(r)
         h = int((r + g + b)/3)
         pix[j,i] = (h, h, h)
         text_file.write(getchar(h))
+        d.text((j*onecharHeight, i*onecharWidth), getchar(h), font = fnt, fill = (r,g,b))
+
     text_file.write('\n')
 text_file.close()
-im.save ("output.png")
+outputImage.save ("output.png")
 print("Converted!")
