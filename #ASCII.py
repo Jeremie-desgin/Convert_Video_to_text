@@ -30,7 +30,7 @@ while True:
     except FileNotFoundError:
         print("file not found")
         continue
-
+#tesst
 
 
 text_file = open("output.txt", "w")
