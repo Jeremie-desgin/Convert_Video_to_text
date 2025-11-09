@@ -5,7 +5,8 @@ import math
 
 
 #chars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. "
-chars = " .:;+*#%@"
+chars = "$@B%8&WM#*oahkbUYXzcvunxrjft?-_+~<>i!lI;:,\"^`'. "
+#chars = " .:;+*#%@"
 charArray = list(chars)
 charLength = len(charArray)
 interval =  charLength/256
